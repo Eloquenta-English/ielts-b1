@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WTE Placement Test — William Thomason English</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1c1c1c;--bg2:#232323;--bg3:#2a2a2a;--border:#3a3a3a;--border-light:#4a4a4a;--text:#e8e8f0;--text-dim:#8888a0;--text-muted:#55556a;--accent:#a3e635;--accent-dim:rgba(163,230,53,.12);--cyan:#22d3ee;--green:#34d399;--amber:#fbbf24;--rose:#fb7185}
+:root.light{--bg:#f8fafc;--bg2:#f1f5f9;--bg3:#e2e8f0;--border:#cbd5e1;--border-light:#94a3b8;--text:#1e293b;--text-dim:#475569;--text-muted:#94a3b8;--accent:#0d9488;--accent-dim:rgba(13,148,136,.1);--cyan:#0891b2;--green:#059669;--amber:#d97706;--rose:#e11d48}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:16px;min-height:100vh}
+.wrap{max-width:700px;margin:0 auto;padding:40px 24px}
+.header{text-align:center;padding:40px 0 30px;position:relative}
+.header h1{font-family:'Fira Code',monospace;font-size:28px;font-weight:700;color:var(--text);margin-bottom:8px}
+.header h1 span{color:var(--accent)}
+.header p{color:var(--text-dim);font-size:14px;max-width:500px;margin:0 auto}
+.theme-toggle{position:absolute;top:16px;right:16px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:6px}
+.theme-toggle:hover{border-color:var(--accent)}
+.timer-bar{position:sticky;top:0;z-index:50;background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:12px}
+.timer-bar .time{font-family:'Fira Code',monospace;font-size:14px;font-weight:700;color:var(--accent)}
+.timer-bar .time.warn{color:var(--amber)}
+.timer-bar .time.danger{color:var(--rose)}
+.progress{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--cyan));border-radius:3px;transition:width .3s}
+.progress-text{font-size:11px;color:var(--text-dim);white-space:nowrap}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:16px}
+.q-level{display:inline-block;padding:2px 10px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.q-num{font-size:12px;color:var(--text-dim);margin-bottom:8px}
+.q-text{font-size:18px;font-weight:600;line-height:1.5;margin-bottom:20px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:15px;cursor:pointer;transition:all .15s;text-align:left;font-family:inherit;display:flex;align-items:center;gap:10px}
+.opt:hover{border-color:var(--accent);background:var(--accent-dim)}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim)}
+.opt.correct{border-color:var(--green);background:rgba(52,211,153,.1)}
+.opt.wrong{border-color:var(--rose);background:rgba(251,113,133,.1)}
+.opt.disabled{opacity:.6;cursor:default}
+.opt-letter{width:28px;height:28px;border-radius:6px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text-dim);flex-shrink:0}
+.opt.selected .opt-letter{background:var(--accent);color:#fff}
+.opt.correct .opt-letter{background:var(--green);color:#fff}
+.opt.wrong .opt-letter{background:var(--rose);color:#fff}
+.feedback{margin-top:16px;padding:14px;border-radius:10px;font-size:14px;line-height:1.6;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);color:var(--green)}
+.feedback.no{background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.2);color:var(--rose)}
+.btn{padding:12px 24px;border-radius:10px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.4;cursor:default;transform:none}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-dim)}
+.btn-ghost:hover{border-color:var(--text);color:var(--text)}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+/* Welcome screen */
+.welcome-card{text-align:center;padding:50px 30px}
+.welcome-card h2{font-size:24px;font-weight:800;margin-bottom:12px}
+.welcome-card p{color:var(--text-dim);margin-bottom:24px;line-height:1.7}
+.welcome-card .features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0;text-align:left}
+.feature{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--text-dim)}
+.feature-icon{font-size:16px}
+.form-group{margin-bottom:16px;text-align:left}
+.form-group label{display:block;font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:6px}
+.form-group input,.form-group textarea{width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .15s}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--accent)}
+/* Results screen */
+.result-level{font-size:48px;font-weight:900;text-align:center;margin:16px 0}
+.result-desc{text-align:center;color:var(--text-dim);font-size:15px;line-height:1.7;margin-bottom:24px}
+.result-breakdown{margin:20px 0}
+.rd-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rd-level{width:40px;font-size:12px;font-weight:700;color:var(--text-dim)}
+.rd-bar{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.rd-fill{height:100%;border-radius:4px;transition:width .5s}
+.rd-score{width:30px;text-align:right;font-size:12px;color:var(--text-dim)}
+.email-sent{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:16px;text-align:center;margin-top:20px;display:none}
+.email-sent.show{display:block}
+@media(max-width:600px){.wrap{padding:24px 16px}.header h1{font-size:22px}.q-text{font-size:16px}.welcome-card .features{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Dark</button>
+
+  <!-- WELCOME SCREEN -->
+  <div id="welcome-screen">
+    <div class="header">
+      <h1>W<span>T</span>E Placement Test</h1>
+      <p>Find your English level in 30 minutes. The test adapts to your ability — questions get harder as you progress.</p>
+    </div>
+    <div class="card welcome-card">
+      <h2>🎯 Smart Grammar Test</h2>
+      <p>This adaptive test covers grammar from beginner (A1) to advanced (C2). Answer each question to the best of your ability — don't worry if some feel too hard!</p>
+      <div class="features">
+        <div class="feature"><span class="feature-icon">⏱️</span>30 minutes</div>
+        <div class="feature"><span class="feature-icon">📊</span>Instant results</div>
+        <div class="feature"><span class="feature-icon">🧠</span>Adaptive difficulty</div>
+        <div class="feature"><span class="feature-icon">📧</span>Results emailed to you</div>
+      </div>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" id="student-name" placeholder="Enter your full name" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>Your Email</label>
+        <input type="email" id="student-email" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Phone (optional)</label>
+        <input type="tel" id="student-phone" placeholder="+33 6 12 34 56 78">
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="startTest()">Start Test →</button>
+    </div>
+  </div>
+
+  <!-- TEST SCREEN -->
+  <div id="test-screen" style="display:none">
+    <div class="timer-bar">
+      <span class="time" id="timer">30:00</span>
+      <div class="progress"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <span class="progress-text" id="progress-text">0 / 20</span>
+    </div>
+    <div id="question-area" style="padding-top:20px"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="prev-btn" onclick="prevQuestion()" style="visibility:hidden">← Back</button>
+      <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen" style="display:none">
+    <div class="header">
+      <h1>Your Results</h1>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="result-level" id="result-level">B1</div>
+      <div class="result-desc" id="result-desc"></div>
+      <div class="result-breakdown" id="result-breakdown"></div>
+      <div class="email-sent" id="email-sent">
+        ✅ Results have been sent to your email and to WTE.
+      </div>
+      <div style="margin-top:24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-ghost" onclick="retakeTest()">Retake Test</button>
+        <button class="btn btn-ghost" onclick="copyResults()">📋 Copy Results</button>
+        <a href="index.html" class="btn btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">Back to Curriculum</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+// ═══ THEME TOGGLE ═══
+function toggleTheme(){
+  var isLight = document.documentElement.classList.toggle('light');
+  var btn = document.getElementById('themeToggle');
+  btn.textContent = isLight ? '☀️ Light' : '🌙 Dark';
+  try{localStorage.setItem('wte-theme', isLight ? 'light' : 'dark')}catch(e){}
+}
+// Load saved theme
+try{var saved=localStorage.getItem('wte-theme');if(saved==='light'){document.documentElement.classList.add('light');var btn=document.getElementById('themeToggle');if(btn)btn.textContent='☀️ Light'}}catch(e){}
+
+// ═══ QUESTION BANK (A1→C2, progressively harder) ═══
+// Each question: {level, topic, question, options, answer, explanation}
+var QUESTIONS = [
+  // ═══ A1 (Elementary) ═══
+  {level:"A1",topic:"Present Simple — to be",q:"I ___ a student.",opts:["am","is","are","be"],a:0,ex:"Use 'am' with 'I'."},
+  {level:"A1",topic:"Present Simple — regular verbs",q:"She ___ to school every day.",opts:["go","goes","going","went"],a:1,ex:"Third person singular adds -s/-es."},
+  {level:"A1",topic:"Articles",q:"I saw ___ elephant at the zoo.",opts:["a","an","the","no article"],a:1,ex:"Use 'an' before vowel sounds."},
+  {level:"A1",topic:"Past Simple — regular",q:"We ___ pizza yesterday.",opts:["eat","ate","eaten","eating"],a:1,ex:"Past simple of 'eat' is 'ate'."},
+  {level:"A1",topic:"Can (ability)",q:"She ___ speak three languages.",opts:["can","could","will","would"],a:0,ex:"'Can' expresses present ability."},
+
+  // ═══ A2 (Pre-intermediate) ═══
+  {level:"A2",topic:"Present Perfect",q:"I ___ never ___ to Japan.",opts:["have / been", "has / been", "have / went", "has / gone"],a:0,ex:"Present perfect: have/has + past participle."},
+  {level:"A2",topic:"Past Continuous",q:"When I arrived, she ___ dinner.",opts:["cooks","was cooked","was cooking","has cooked"],a:2,ex:"Past continuous for actions in progress at a past moment."},
+  {level:"A2",topic:"First Conditional",q:"If it rains, we ___ inside.",opts:["will stay","stay","stayed","would stay"],a:0,ex:"First conditional: if + present, will + infinitive."},
+  {level:"A2",topic:"Comparative",q:"This book is ___ than that one.",opts:["more interesting","most interesting","interestinger","more interestinger"],a:0,ex:"Long adjectives use 'more + adjective + than'."},
+  {level:"A2",topic:"Used to",q:"I ___ play football when I was young.",opts:["use to","used to","was used to","am used to"],a:1,ex:"'Used to' for past habits that no longer happen."},
+
+  // ═══ B1 (Intermediate) ═══
+  {level:"B1",topic:"Present Perfect Continuous",q:"She ___ for three hours.",opts:["has been studying","has studied","is studying","studies"],a:0,ex:"Present perfect continuous emphasizes duration."},
+  {level:"B1",topic:"Past Perfect",q:"When I arrived, the train ___.",opts:["already left", "has already left", "had already left", "was already leaving"],a:2,ex:"Past perfect for actions completed before another past action."},
+  {level:"B1",topic:"Passive Voice",q:"This building ___ in 1920.",opts:["built", "was built", "has built", "is built"],a:1,ex:"Passive: be + past participle."},
+  {level:"B1",topic:"Second Conditional",q:"If I ___ rich, I would travel the world.",opts:["am","was","were","would be"],a:2,ex:"Second conditional uses 'were' for all persons."},
+  {level:"B1",topic:"Reported Speech",q:'She said she was tired." → Direct speech: "___"',opts:["I am tired","I was tired","I will be tired","I have been tired"],a:0,ex:"Reported speech shifts tenses back."},
+
+  // ═══ B2 (Upper Intermediate) ═══
+  {level:"B2",topic:"Mixed Conditional",q:"If she ___ harder, she would be a doctor now.",opts: ["studied", "had studied", "studies", "would study"],a:1,ex:"Mixed conditional: if + past perfect, would + infinitive."},
+  {level:"B2",topic:"Inversion",q:"___ did I realize the mistake.",opts: ["Only later", "Later only", "Only after", "After only"],a:0,ex:"'Only later' triggers inversion in formal English."},
+  {level:"B2",topic:"Participle Clause",q:"___ the news, she called her mother.",opts: ["Having heard", "Heard", "Hearing loudly", "Was hearing"],a:0,ex:"Perfect participle for actions completed before the main clause."},
+  {level:"B2",topic:"Cleft Sentence",q:"___ John who broke the window.",opts: ["It was", "That was", "There was", "What was"],a:0,ex:"'It is/was ... that/who ...' adds emphasis."},
+  {level:"B2",topic:"Advanced Modal (deduction)",q:"She ___ be at home — the lights are on.",opts: ["might", "must", "can", "could"],a:1,ex:"'Must' for logical deduction based on evidence."},
+
+  // ═══ C1 (Advanced) ═══
+  {level:"C1",topic:"Advanced Present",q:"She ___ about her problems again.",opts: ["always complains", "is always complaining", "has always complained", "complained always"],a:1,ex:"Present continuous with 'always' expresses annoyance."},
+  {level:"C1",topic:"Subjunctive",q:"The doctor recommended that she ___ more rest.",opts: ["takes", "take", "taking", "to take"],a:1,ex:"Subjunctive uses base form: suggest/recommend that + base verb."},
+  {level:"C1",topic:"Advanced Modal (past)",q:"You ___ have told me earlier. I had to wait.",opts: ["should", "would", "could", "must"],a:0,ex:"'Should have' = criticism about a past action."},
+  {level:"C1",topic:"Ellipsis",q:"I can swim but she ___.",opts: ["can't", "can not", "cannot", "could not"],a:0,ex:"Ellipsis: omit repeated words after auxiliary verbs."},
+  {level:"C1",topic:"Inversion (negative)",q:"___ had we left when it started raining.",opts: ["Hardly", "No sooner", "Not only", "Never"],a:1,ex:"'No sooner ... than' with inversion for emphasis."},
+
+  // ═══ C2 (Proficiency) ═══
+  {level:"C2",topic:"Advanced Subjunctive",q:"I wish I ___ speak five languages fluently.",opts: ["can", "could", "will", "would"],a:1,ex:"'Wish + could' for present/future unreal ability."},
+  {level:"C2",topic:"Inversion (negative adverbial)",q:"No sooner ___ than the phone rang.",opts: ["we had left", "had we left", "we left", "did we leave"],a:1,ex:"'No sooner' + auxiliary + subject + main verb."},
+  {level:"C2",topic:"Complex Conditionals",q:"Had I known, I ___ have helped.",opts: ["will", "would", "could", "might"],a:1,ex:"Inverted third conditional: 'Had I known' = 'If I had known'."},
+  {level:"C2",topic:"Nominative Absolute",q:"___, we decided to leave.",opts: ["The meeting having ended", "The meeting ended", "The meeting was ended", "The meeting has ended"],a:0,ex:"Nominative absolute: noun + participle, no conjunction."},
+  {level:"C2",topic:"Advanced Ellipsis with Substitution",q:"I said I'd help and I ___.",opts: ["did so", "did it", "done", "did"],a:0,ex:"'Did so' substitutes for the entire verb phrase."}
+];
+
+var LEVEL_ORDER = ["A1","A1","A1","A1","A1","A2","A2","A2","A2","A2","B1","B1","B1","B1","B1","B2","B2","B2","B2","B2","C1","C1","C1","C1","C1","C2","C2","C2","C2","C2"];
+var LEVEL_SCORES = {A1:1, A2:2, B1:3, B2:4, C1:5, C2:6};
+
+// ═══ TEST STATE ═══
+var state = {
+  currentQ: 0,
+  answers: [],
+  correct: 0,
+  levelCorrect: {A1:0, A2:0, B1:0, B2:0, C1:0, C2:0},
+  levelTotal: {A1:0, A2:0, B1:0, B2:0, C1:0, C2:0},
+  studentName: "",
+  studentEmail: "",
+  studentPhone: "",
+  startTime: null,
+  timerInterval: null,
+  timeRemaining: 30 * 60,
+  testComplete: false
+};
+
+// ═══════════════════════════════════════════
+// WELCOME → TEST
+// ═══════════════════════════════════════════
+function startTest(){
+  var name = document.getElementById("student-name").value.trim();
+  var email = document.getElementById("student-email").value.trim();
+  if(!name){alert("Please enter your name."); return;}
+  if(!email || !email.includes("@")){alert("Please enter a valid email address."); return;}
+  state.studentName = name;
+  state.studentEmail = email;
+  state.studentPhone = document.getElementById("student-phone").value.trim();
+  state.startTime = Date.now();
+  state.timeRemaining = 30 * 60;
+  state.currentQ = 0;
+  state.answers = [];
+  state.correct = 0;
+  state.levelCorrect = {A1:0,A2:0,B1:0,B2:0,C1:0,C2:0};
+  state.levelTotal = {A1:0,A2:0,B1:0,B2:0,C1:0,C2:0};
+  state.testComplete = false;
+  document.getElementById("welcome-screen").style.display = "none";
+  document.getElementById("test-screen").style.display = "block";
+  renderQuestion();
+  startTimer();
+}
+
+// ═══════════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════════
+function startTimer(){
+  if(state.timerInterval) clearInterval(state.timerInterval);
+  state.timerInterval = setInterval(function(){
+    state.timeRemaining--;
+    if(state.timeRemaining <= 0){
+      clearInterval(state.timerInterval);
+      finishTest();
+      return;
+    }
+    var m = Math.floor(state.timeRemaining / 60);
+    var s = state.timeRemaining % 60;
+    var el = document.getElementById("timer");
+    el.textContent = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+    if(state.timeRemaining <= 300) el.className = "time warn";
+    if(state.timeRemaining <= 60) el.className = "time danger";
+  }, 1000);
+}
+
+// ═══════════════════════════════════════════
+// RENDER QUESTION
+// ═══════════════════════════════════════════
+function renderQuestion(){
+  var q = QUESTIONS[state.currentQ];
+  state.levelTotal[q.level] = (state.levelTotal[q.level] || 0) + 1;
+  var area = document.getElementById("question-area");
+  var levelColors = {A1:"#34d399", A2:"#22d3ee", B1:"#a3e635", B2:"#fbbf24", C1:"#a78bfa", C2:"#fb7185"};
+  var html = "";
+  html += '<div class="card">';
+  html += '<span class="q-level" style="background:' + levelColors[q.level] + '22;color:' + levelColors[q.level] + '">' + q.level + '</span>';
+  html += '<div class="q-num">Question ' + (state.currentQ + 1) + ' of ' + QUESTIONS.length + ' — ' + q.topic + '</div>';
+  html += '<div class="q-text">' + q.q + '</div>';
+  html += '<div class="opts" id="opts">';
+  var letters = ["A","B","C","D"];
+  q.opts.forEach(function(opt, i){
+    html += '<button class="opt" onclick="selectAnswer(' + i + ')" id="opt-' + i + '"><span class="opt-letter">' + letters[i] + '</span><span>' + opt + '</span></button>';
+  });
+  html += '</div>';
+  html += '<div class="feedback" id="feedback"></div>';
+  html += '</div>';
+  area.innerHTML = html;
+  document.getElementById("prev-btn").style.visibility = state.currentQ > 0 ? "visible" : "hidden";
+  document.getElementById("next-btn").disabled = true;
+  updateProgress();
+}
+
+function updateProgress(){
+  var pct = ((state.currentQ + 1) / QUESTIONS.length) * 100;
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("progress-text").textContent = (state.currentQ + 1) + " / " + QUESTIONS.length;
+}
+
+// ═══════════════════════════════════════════
+// ANSWER SELECTION — IMMEDIATE FEEDBACK, NOT ADAPTIVE
+// ═══════════════════════════════════════════
+function selectAnswer(idx){
+  // Don't allow changing answer
+  if(state.currentQ < state.answers.length && state.answers[state.currentQ] !== undefined) return;
+  if(state.testComplete) return;
+  var q = QUESTIONS[state.currentQ];
+  var correct = idx === q.answer;
+  state.answers[state.currentQ] = idx;
+  if(correct){
+    state.correct++;
+    state.levelCorrect[q.level] = (state.levelCorrect[q.level] || 0) + 1;
+  }
+  // Highlight options
+  q.opts.forEach(function(opt, i){
+    var btn = document.getElementById("opt-" + i);
+    btn.classList.add("disabled");
+    btn.onclick = null;
+    if(i === q.answer) btn.classList.add("correct");
+    else if(i === idx && !correct) btn.classList.add("wrong");
+    else btn.style.opacity = "0.5";
+  });
+  // Show feedback
+  var fb = document.getElementById("feedback");
+  fb.classList.add("show");
+  fb.className = "feedback show " + (correct ? "ok" : "no");
+  fb.innerHTML = (correct ? "✅ Correct!" : "❌ Not quite. ") + q.ex;
+  // Enable next
+  document.getElementById("next-btn").disabled = false;
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function prevQuestion(){
+  if(state.currentQ > 0){
+    state.currentQ--;
+    renderQuestion();
+  }
+}
+
+function nextQuestion(){
+  if(state.currentQ < QUESTIONS.length - 1){
+    state.currentQ++;
+    renderQuestion();
+  } else {
+    finishTest();
+  }
+}
+
+// ═══════════════════════════════════════════
+// FINISH → CALCULATE LEVEL
+// ═══════════════════════════════════════════
+function finishTest(){
+  state.testComplete = true;
+  if(state.timerInterval) clearInterval(state.timerInterval);
+  document.getElementById("test-screen").style.display = "none";
+  document.getElementById("results-screen").style.display = "block";
+  var level = calculateLevel();
+  showResults(level);
+  sendResults(level);
+}
+
+function calculateLevel(){
+  // Determine level based on performance at each level
+  // Start from highest and work down
+  var levels = ["C2","C1","B2","B1","A2","A1"];
+  var estimatedLevel = "A1";
+  for(var i = 0; i < levels.length; i++){
+    var lvl = levels[i];
+    var total = state.levelTotal[lvl] || 0;
+    var correct = state.levelCorrect[lvl] || 0;
+    if(total > 0){
+      var pct = correct / total;
+      if(pct >= 0.6){
+        estimatedLevel = lvl;
+        break;
+      }
+    }
+  }
+  return estimatedLevel;
+}
+
+function showResults(level){
+  var descs = {
+    A1: "Elementary — You can understand basic phrases and introduce yourself. Focus on building core vocabulary and simple present/past tenses.",
+    A2: "Pre-intermediate — You can handle simple everyday conversations. Work on expanding vocabulary and using present perfect and conditionals.",
+    B1: "Intermediate — You can express opinions and handle most travel situations. Focus on passive voice,reported speech, and more complex structures.",
+    B2: "Upper Intermediate — You can communicate fluently in most situations. Work on complex grammar like inversion, participle clauses, and advanced conditionals.",
+    C1: "Advanced — You can use English flexibly and effectively. Fine-tune with advanced subjunctive, ellipsis, and near-native structures.",
+    C2: "Proficiency — You have near-native command of English. Continue refining nuance, style, and advanced rhetorical structures."
+  };
+  document.getElementById("result-level").textContent = level;
+  document.getElementById("result-level").style.color = {A1:"#34d399",A2:"#22d3ee",B1:"#a3e635",B2:"#fbbf24",C1:"#a78bfa",C2:"#fb7185"}[level];
+  document.getElementById("result-desc").textContent = descs[level] || "";
+  // Breakdown
+  var bd = document.getElementById("result-breakdown");
+  var html = "";
+  ["A1","A2","B1","B2","C1","C2"].forEach(function(lvl){
+    var total = state.levelTotal[lvl] || 0;
+    var correct = state.levelCorrect[lvl] || 0;
+    var pct = total > 0 ? Math.round(correct/total*100) : 0;
+    var color = {A1:"#34d399",A2:"#22d3ee",B1:"#a3e635",B2:"#fbbf24",C1:"#a78bfa",C2:"#fb7185"}[lvl];
+    html += '<div class="rd-row"><span class="rd-level">' + lvl + '</span><div class="rd-bar"><div class="rd-fill" style="width:' + pct + '%;background:' + color + '"></div></div><span class="rd-score">' + correct + '/' + total + '</span></div>';
+  });
+  bd.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+// EMAIL RESULTS
+// ═══════════════════════════════════════════
+function sendResults(level){
+  // Build email body
+  var timeTaken = Math.round((Date.now() - state.startTime) / 1000);
+  var mins = Math.floor(timeTaken / 60);
+  var secs = timeTaken % 60;
+  var body = "WTE Placement Test Results\n";
+  body += "============================\n\n";
+  body += "Student: " + state.studentName + "\n";
+  body += "Email: " + state.studentEmail + "\n";
+  if(state.studentPhone) body += "Phone: " + state.studentPhone + "\n";
+  body += "Estimated Level: " + level + "\n";
+  body += "Score: " + state.correct + "/" + QUESTIONS.length + " correct (" + Math.round(state.correct/QUESTIONS.length*100) + "%)\n";
+  body += "Time: " + mins + "m " + secs + "s\n\n";
+  body += "Level Breakdown:\n";
+  ["A1","A2","B1","B2","C1","C2"].forEach(function(lvl){
+    var total = state.levelTotal[lvl] || 0;
+    var correct = state.levelCorrect[lvl] || 0;
+    body += "  " + lvl + ": " + correct + "/" + total + "\n";
+  });
+  body += "\nTake the test here: williamthomason.github.io/ESL-Edutech/William's%20Projects/web-apps/WTE-Curriculum/placement-test.html";
+  
+  // Open mailto link
+  var subject = "WTE Placement Test - " + state.studentName + " - Level " + level;
+  var mailto = "mailto:william@williamthomason.co.za?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body).replace(/%20/g,"+").replace(/%0A/g,"%0D%0A");
+  window.location.href = mailto;
+  document.getElementById("email-sent").classList.add("show");
+}
+
+function retakeTest(){
+  document.getElementById("results-screen").style.display = "none";
+  document.getElementById("welcome-screen").style.display = "block";
+  document.getElementById("email-sent").classList.remove("show");
+  state.currentQ = 0;
+  state.answers = [];
+  state.correct = 0;
+  state.levelCorrect = {A1:0,A2:0,B1:0,B2:0,C1:0,C2:0};
+  state.levelTotal = {A1:0,A2:0,B1:0,B2:0,C1:0,C2:0};
+  state.testComplete = false;
+  document.getElementById("timer").textContent = "30:00";
+  document.getElementById("timer").className = "time";
+}
+
+function copyResults(){
+  var level = document.getElementById("result-level").textContent;
+  var text = "WTE Placement Test Results\n";
+  text += "Student: " + state.studentName + "\n";
+  text += "Email: " + state.studentEmail + "\n";
+  text += "Level: " + level + "\n";
+  text += "Score: " + state.correct + "/" + QUESTIONS.length + "\n";
+  text += "\nLevel Breakdown:\n";
+  ["A1","A2","B1","B2","C1","C2"].forEach(function(lvl){
+    text += "  " + lvl + ": " + (state.levelCorrect[lvl]||0) + "/" + (state.levelTotal[lvl]||0) + "\n";
+  });
+  navigator.clipboard.writeText(text).then(function(){
+    alert("Results copied to clipboard! You can paste them into an email to william@williamthomason.co.za");
+  }).catch(function(){
+    prompt("Copy these results and email them to william@williamthomason.co.za:", text);
+  });
+}
+</script>
+<!-- Donate Section — inconspicuous, bottom of page -->
+<div id="donate-bar" style="text-align:center;padding:12px 0 8px;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.5px;border-top:1px solid rgba(255,255,255,0.06);margin-top:auto">
+  <span style="margin-right:10px">Support this project</span>
+  <a href="https://paypal.me/williamgraythomason" target="_blank" rel="noopener" style="display:inline-block;background:#0070ba;color:#fff;padding:4px 12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:11px;margin:0 4px">PayPal</a>
+  <a href="https://wise.com/payme/williamgraythomason" target="_blank" rel="noopener" style="display:inline-block;background:#9fe870;color:#163300;padding:4px 12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:11px;margin:0 4px">Wise</a>
+</div>
+</body>
+</html>
