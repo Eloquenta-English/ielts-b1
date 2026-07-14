@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forest Friends — Vocabulary Arena</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="forest-friends.css">
+</head>
+<body>
+
+<header class="forest-header">
+  <button class="back-btn" onclick="goBack()">◀ BACK</button>
+  <h1>🌲 FOREST FRIENDS</h1>
+  <div style="width:60px"></div>
+</header>
+
+<div id="app">
+  <div id="topic-select">
+    <div class="topic-title">SELECT YOUR ARENA</div>
+    <div class="topic-grid" id="topic-grid"></div>
+  </div>
+
+  <div id="game-area">
+    <div id="game-area-bg"></div>
+    <div id="game-area-inner">
+      <div class="topic-label" id="topic-label"></div>
+
+      <!-- TTS Voice Bar -->
+      <div class="voice-bar" id="voice-bar">
+        <label>🔊 Voice</label>
+        <select class="voice-select" id="voice-select"></select>
+        <label>🌐 L1</label>
+        <select class="voice-select lang-select" id="lang-select"></select>
+        <button class="btn-speak" id="btn-speak" onclick="speakQuestion()">▶ SPEAK</button>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-info"><span id="progress-text">1 / 20</span><span id="score-text">Score: 0</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <div class="character-box">
+        <div class="character-orb" id="char"></div>
+        <div class="speech-bubble" id="activity"></div>
+      </div>
+      <div class="options" id="options"></div>
+    </div>
+  </div>
+</div>
+
+<script src="forest-friends-data.js"></script>
+<script src="forest-friends.js"></script>
+<!-- Donate Section — inconspicuous, bottom of page -->
+<div id="donate-bar" style="text-align:center;padding:12px 0 8px;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.5px;border-top:1px solid rgba(255,255,255,0.06);margin-top:auto">
+  <span style="margin-right:10px">Support this project</span>
+  <a href="https://paypal.me/williamgraythomason" target="_blank" rel="noopener" style="display:inline-block;background:#0070ba;color:#fff;padding:4px 12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:11px;margin:0 4px">PayPal</a>
+  <a href="https://wise.com/payme/williamgraythomason" target="_blank" rel="noopener" style="display:inline-block;background:#9fe870;color:#163300;padding:4px 12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:11px;margin:0 4px">Wise</a>
+</div>
+</body>
+</html>
