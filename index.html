@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Speaking B1 Practice Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;500;600&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root { --hue: 200; --bg: #0a1020; --card-bg: rgba(15, 23, 42, 0.85); --border: rgba(251, 191, 36, 0.4); --text: #f1f5f9; --text-muted: #94a3b8; --accent: #fbbf24; --cyan: #22d3ee; --lime: #a3e635; --rose: #fb7185; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; background-image: radial-gradient(ellipse at 20% 50%, rgba(34, 211, 238, 0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(251, 191, 36, 0.06) 0%, transparent 50%); }
+.header { text-align: center; padding: 3em 1em 2em; border-bottom: 1px solid rgba(251, 191, 36, 0.15); margin-bottom: 2em; }
+.header h1 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(2rem, 5vw, 3.5rem); background: linear-gradient(135deg, #fbbf24, #f472b6, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.4em; }
+.header p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+.level-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 1em; }
+.level-b1 { background: rgba(251, 191, 36, 0.2); color: var(--accent); border: 1px solid rgba(251, 191, 36, 0.4); }
+.container { max-width: min(94vw, 1400px); margin: 0 auto; padding: 0 1.5em 3em; }
+.section-title { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 1px solid rgba(251, 191, 36, 0.2); }
+.deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5em; }
+.deck-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; cursor: pointer; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+.deck-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 0 30px rgba(251, 191, 36, 0.15), 0 20px 40px rgba(0, 0, 0, 0.3); }
+.deck-card.completed { border-color: var(--lime); box-shadow: 0 0 20px rgba(163, 230, 53, 0.15); }
+.deck-card-image { width: 100%; height: 160px; overflow: hidden; position: relative; }
+.deck-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-tags { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.8em; background: linear-gradient(transparent, rgba(0,0,0,0.7)); display: flex; gap: 0.4em; }
+.deck-card-body { padding: 1.2em 1.4em 1.4em; flex: 1; display: flex; flex-direction: column; }
+.tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.tag-part1 { background: rgba(251, 191, 36, 0.15); color: var(--accent); }
+.tag-part2 { background: rgba(34, 211, 238, 0.15); color: var(--cyan); }
+.tag-part3 { background: rgba(251, 113, 133, 0.15); color: var(--rose); }
+.deck-card h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin-bottom: 0.4em; line-height: 1.3; }
+.deck-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; flex: 1; }
+.deck-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1em; padding-top: 0.8em; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+.deck-card-progress { font-size: 0.78rem; color: var(--text-muted); }
+.deck-card-progress.done { color: var(--lime); }
+.completed-badge { font-size: 0.7rem; padding: 3px 10px; border-radius: 12px; background: rgba(163, 230, 53, 0.2); color: var(--lime); font-weight: 600; }
+@media (max-width: 768px) { .deck-grid { grid-template-columns: 1fr; } .header { padding: 2em 1em 1.5em; } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>IELTS Speaking B1 Practice</h1>
+  <p>Master all three parts of the IELTS Speaking test with model answers you can reveal when ready. Track your progress as you practice.</p>
+  <span class="level-badge level-b1">B1 Level</span>
+</header>
+
+<div class="container">
+
+  <h2 class="section-title">B1 Speaking Topics</h2>
+  <div class="deck-grid" id="deckGrid">
+    <a class="deck-card" href="family-childhood-v2.html" data-deck="family-childhood" aria-label="Family & Childhood">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1128319/pexels-photo-1128319.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Family & Childhood</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-family-childhood">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-family-childhood">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="movies-cinema-v2.html" data-deck="movies-cinema" aria-label="Movies & Cinema">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/436413/pexels-photo-436413.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Movies & Cinema</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-movies-cinema">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-movies-cinema">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="music-concerts-v2.html" data-deck="music-concerts" aria-label="Music & Concerts">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/196652/pexels-photo-196652.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Music & Concerts</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-music-concerts">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-music-concerts">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="newspapers-media-v2.html" data-deck="newspapers-media" aria-label="Newspapers & Media">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/3945430/pexels-photo-3945430.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Newspapers & Media</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-newspapers-media">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-newspapers-media">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="outdoor-activities-v2.html" data-deck="outdoor-activities" aria-label="Outdoor Activities">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1619317/pexels-photo-1619317.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Outdoor Activities</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-outdoor-activities">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-outdoor-activities">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="parties-social-events-v2.html" data-deck="parties-social-events" aria-label="Parties & Social Events">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/2255938/pexels-photo-2255938.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Parties & Social Events</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-parties-social-events">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-parties-social-events">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="restaurants-eating-out-v2.html" data-deck="restaurants-eating-out" aria-label="Restaurants & Eating Out">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1648778/pexels-photo-1648778.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Restaurants & Eating Out</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-restaurants-eating-out">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-restaurants-eating-out">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="shopping-money-v2.html" data-deck="shopping-money" aria-label="Shopping & Money">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1727687/pexels-photo-1727687.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Shopping & Money</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-shopping-money">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-shopping-money">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="transport-travel-v2.html" data-deck="transport-travel" aria-label="Transport & Travel">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/3024280/pexels-photo-3024280.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Transport & Travel</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-transport-travel">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-transport-travel">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="work-life-balance-v2.html" data-deck="work-life-balance" aria-label="Work-Life Balance">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Work-Life Balance</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-work-life-balance">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-work-life-balance">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="public-transport-v2.html" data-deck="public-transport" aria-label="Public Transport">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/3024280/pexels-photo-3024280.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Public Transport</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-public-transport">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-public-transport">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="television-habits-v2.html" data-deck="television-habits" aria-label="Television Habits">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/5028921/pexels-photo-5028921.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Television Habits</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-television-habits">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-television-habits">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="mobile-phones-v2.html" data-deck="mobile-phones" aria-label="Mobile Phones">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Mobile Phones</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-mobile-phones">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-mobile-phones">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="music-tastes-v2.html" data-deck="music-tastes" aria-label="Music Tastes">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Music Tastes</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-music-tastes">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-music-tastes">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="shopping-habits-v2.html" data-deck="shopping-habits" aria-label="Shopping Habits">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1727687/pexels-photo-1727687.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Shopping Habits</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-shopping-habits">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-shopping-habits">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="hobbies-interests-v2.html" data-deck="hobbies-interests" aria-label="Hobbies & Interests">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1630647/pexels-photo-1630647.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Hobbies & Interests</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-hobbies-interests">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-hobbies-interests">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="food-cooking-v2.html" data-deck="food-cooking" aria-label="Food & Cooking">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1648778/pexels-photo-1648778.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Food & Cooking</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-food-cooking">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-food-cooking">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="travel-tourism-v2.html" data-deck="travel-tourism" aria-label="Travel & Tourism">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1619317/pexels-photo-1619317.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Travel & Tourism</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-travel-tourism">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-travel-tourism">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="technology-habits-v2.html" data-deck="technology-habits" aria-label="Technology Habits">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1181311/pexels-photo-1181311.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Technology Habits</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-technology-habits">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-technology-habits">Done</span>
+        </div>
+      </div>
+    </a>
+    <a class="deck-card" href="work-career-v2.html" data-deck="work-career" aria-label="Work & Career">
+      <div class="deck-card-image">
+        <img src="https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&w=640" alt="" loading="lazy" aria-hidden="true">
+        <div class="card-tags">
+          <span class="tag tag-part1">Part 1</span>
+          <span class="tag tag-part2">Part 2</span>
+          <span class="tag tag-part3">Part 3</span>
+        </div>
+      </div>
+      <div class="deck-card-body">
+        <h3>Work & Career</h3>
+        <p>IELTS Speaking B1 practice deck covering Part 1, Part 2 cue card, and Part 3 discussion.</p>
+        <div class="deck-card-footer">
+          <span class="deck-card-progress" id="progress-work-career">Not started</span>
+          <span class="completed-badge" style="display:none" id="done-work-career">Done</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+<script>
+const decks = ['family-childhood', 'movies-cinema', 'music-concerts', 'newspapers-media', 'outdoor-activities', 'parties-social-events', 'restaurants-eating-out', 'shopping-money', 'transport-travel', 'work-life-balance', 'public-transport', 'television-habits', 'mobile-phones', 'music-tastes', 'shopping-habits', 'hobbies-interests', 'food-cooking', 'travel-tourism', 'technology-habits', 'work-career'];
+
+function loadProgress() {
+  try {
+    const data = JSON.parse(localStorage.getItem('ielts-speaking-progress') || '{}');
+    decks.forEach(id => {
+      if (data[id] && data[id].completed) {
+        const card = document.querySelector(`a[data-deck="${id}"]`);
+        if (card) {
+          card.classList.add('completed');
+          const prog = document.getElementById(`progress-${id}`);
+          const done = document.getElementById(`done-${id}`);
+          if (prog) { prog.textContent = 'Completed'; prog.classList.add('done'); }
+          if (done) done.style.display = 'inline-block';
+        }
+      }
+    });
+  } catch(e) {}
+}
+loadProgress();
+</script>
+
+</body>
+</html>
