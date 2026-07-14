@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forest Friends — My Daily Routine</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:#0d2918;color:#e8f5e9;line-height:1.6;min-height:100vh;overflow:hidden}
+
+/* ═══ SLIDE CONTAINER ═══ */
+.slideshow{position:relative;width:100vw;height:100vh;overflow:hidden}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;opacity:0;transition:opacity .4s ease}
+.slide.active{display:flex;opacity:1}
+
+/* ═══ BACKGROUNDS ═══ */
+.bg-forest{background:linear-gradient(180deg,#1a4a32 0%,#166534 30%,#22c55e 60%,#4ade80 100%)}
+.bg-morning{background:linear-gradient(180deg,#1e3a5f 0%,#2563eb 30%,#60a5fa 60%,#93c5fd 100%)}
+.bg-school{background:linear-gradient(180deg,#4a1942 0%,#7c3aed 30%,#a78bfa 60%,#c4b5fd 100%)}
+.bg-evening{background:linear-gradient(180deg,#1a1a2e 0%,#4a1942 30%,#7c2d72 60%,#a855f7 100%)}
+.bg-night{background:linear-gradient(180deg,#020617 0%,#0f172a 40%,#1e293b 100%)}
+
+/* ═══ TITLE FONTS ═══ */
+.title{font-family:'Quicksand',sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3.5rem);text-align:center;margin-bottom:12px;text-shadow:0 3px 12px rgba(0,0,0,.3)}
+.subtitle{font-family:'Quicksand',sans-serif;font-weight:700;font-size:clamp(1.1rem,2.5vw,1.6rem);text-align:center;margin-bottom:24px;opacity:.9}
+.slide-num{position:absolute;top:16px;right:24px;font-size:.85rem;opacity:.5;font-weight:600}
+
+/* ═══ TEXT BOXES ═══ */
+.text-box{background:rgba(13,41,24,.85);backdrop-filter:blur(12px);border:2px solid rgba(74,222,128,.3);border-radius:20px;padding:20px 28px;max-width:600px;margin:8px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.text-box p{font-size:clamp(1rem,2vw,1.25rem);font-weight:600;line-height:1.5}
+.text-box .en{color:#4ade80;font-weight:800}
+.text-box .jp{color:#86efac;font-size:.9em;font-weight:400;margin-top:4px}
+.text-box.highlight{background:rgba(34,211,238,.15);border-color:rgba(34,211,238,.4)}
+.text-box.highlight .en{color:#22d3ee}
+.text-box.warn{background:rgba(251,191,36,.15);border-color:rgba(251,191,36,.4)}
+.text-box.warn .en{color:#fbbf24}
+
+/* ═══ SPEECH BUBBLE ═══ */
+.speech-bubble{position:relative;background:rgba(26,74,50,.9);border:2px solid #22c55e;border-radius:20px;padding:16px 24px;max-width:450px;margin:12px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.speech-bubble::before{content:'';position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:12px solid #22c55e}
+.speech-bubble::after{content:'';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px solid #1a4a32}
+.speech-bubble p{font-size:clamp(.95rem,1.8vw,1.15rem);font-weight:700;color:#4ade80}
+
+/* ═══ IMAGE CARDS ═══ */
+.img-card{background:rgba(15,23,42,.8);backdrop-filter:blur(8px);border:2px solid rgba(74,222,128,.2);border-radius:16px;padding:12px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.img-card img{width:100%;height:140px;object-fit:cover;border-radius:10px;display:block}
+.img-card .label{margin-top:8px;font-weight:700;font-size:.95rem;color:#4ade80}
+.img-card .jp-label{font-size:.8rem;color:#86efac;font-weight:400}
+
+/* ═══ GRID LAYOUTS ═══ */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:800px;width:100%}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;width:100%}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:900px;width:100%}
+
+/* ═══ CHARACTER ═══ */
+.char{position:absolute;bottom:0;z-index:5;cursor:pointer;transition:transform .3s}
+.char:hover{transform:translateY(-8px) scale(1.05)!important}
+.char svg{width:80px;height:100px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+.char-left{left:5%}
+.char-right{right:5%}
+
+/* ═══ NAVIGATION ═══ */
+.nav-btn{position:fixed;bottom:24px;z-index:50;background:rgba(15,23,42,.85);backdrop-filter:blur(8px);border:2px solid rgba(74,222,128,.6);color:#4ade80;padding:14px 28px;border-radius:50px;font-weight:800;font-size:1.05rem;cursor:pointer;transition:all .2s;font-family:'Quicksand',sans-serif;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.nav-btn:hover{background:rgba(15,23,42,.95);border-color:#4ade80;transform:scale(1.05);box-shadow:0 6px 24px rgba(0,0,0,.5)}
+.nav-btn:active{transform:scale(.98)}
+.nav-prev{left:24px}
+.nav-next{right:24px}
+
+/* ═══ PROGRESS ═══ */
+.progress{position:fixed;bottom:0;left:0;right:0;height:4px;background:rgba(255,255,255,.1);z-index:60}
+.progress-fill{height:100%;background:linear-gradient(90deg,#22d3ee,#4ade80);transition:width .4s ease}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes fadeInUp{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+.anim-float{animation:float 3s ease-in-out infinite}
+.anim-fade{animation:fadeInUp .6s ease-out both}
+.delay-1{animation-delay:.1s}
+.delay-2{animation-delay:.2s}
+.delay-3{animation-delay:.3s}
+.delay-4{animation-delay:.4s}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:700px){
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr 1fr;gap:12px}
+  .slide{padding:20px}
+  .title{font-size:1.6rem}
+  .char svg{width:60px;height:75px}
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="progress-fill" id="progressFill" style="width:10%"></div></div>
+
+<div class="slideshow" id="slideshow">
+
+  <!-- ═══ SLIDE 1: TITLE ═══ -->
+  <div class="slide active bg-forest" data-slide="1">
+    <span class="slide-num">1 / 10</span>
+    <div class="anim-fade">
+      <h1 class="title">🌅 My Daily Routine</h1>
+      <p class="subtitle">まいにちの しゅうかん<br><em>Mainichi no shuukan — Everyday Habits</em></p>
+    </div>
+    <div class="text-box anim-fade delay-2" style="margin-top:32px">
+      <p><span class="en">What do you do every day?</span></p>
+      <p class="jp">あなたは まいなに を しますか？</p>
+    </div>
+    <div class="char char-left anim-float"><div id="charOwl1"></div></div>
+    <div class="char char-right anim-float" style="animation-delay:.5s"><div id="charFox1"></div></div>
+  </div>
+
+  <!-- ═══ SLIDE 2: WAKE UP ═══ -->
+  <div class="slide bg-morning" data-slide="2">
+    <span class="slide-num">2 / 10</span>
+    <h1 class="title anim-fade">⏰ I wake up at 7:00</h1>
+    <p class="subtitle anim-fade delay-1">しちじに おきます<br><em>Shichiji ni okimasu</em></p>
+    <div class="grid-2 anim-fade delay-2" style="margin-top:24px">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=400&h=200&fit=crop" alt="alarm clock">
+        <div class="label">⏰ Alarm Clock</div>
+        <div class="jp-label">めざましどけい</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=200&fit=crop" alt="waking up">
+        <div class="label">😴 Wake up</div>
+        <div class="jp-label">おきます</div>
+      </div>
+    </div>
+    <div class="speech-bubble anim-fade delay-3" style="margin-top:24px">
+      <p>🌅 "Good morning! What time do you wake up?"</p>
+      <p style="font-size:.8em;color:#86efac;margin-top:4px">「おはよう！なんじにおきますか？」</p>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 3: BREAKFAST ═══ -->
+  <div class="slide bg-morning" data-slide="3">
+    <span class="slide-num">3 / 10</span>
+    <h1 class="title anim-fade">🍳 I eat breakfast</h1>
+    <p class="subtitle anim-fade delay-1">ちょうしょくを たべます<br><em>Choushoku wo tabemasu</em></p>
+    <div class="grid-3 anim-fade delay-2" style="margin-top:24px">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=300&h=180&fit=crop" alt="rice">
+        <div class="label">🍚 Rice</div>
+        <div class="jp-label">ごはん</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=300&h=180&fit=crop" alt="bread">
+        <div class="label">🍞 Bread</div>
+        <div class="jp-label">パン</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=180&fit=crop" alt="salad">
+        <div class="label">🥗 Salad</div>
+        <div class="jp-label">サラダ</div>
+      </div>
+    </div>
+    <div class="text-box anim-fade delay-3" style="margin-top:24px">
+      <p><span class="en">"I eat rice and miso soup for breakfast!"</span></p>
+      <p class="jp">「ちょうしょくは ごはんと みそしるです！」</p>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 4: GO TO SCHOOL ═══ -->
+  <div class="slide bg-school" data-slide="4">
+    <span class="slide-num">4 / 10</span>
+    <h1 class="title anim-fade">🎒 I go to school</h1>
+    <p class="subtitle anim-fade delay-1">がっこうに いきます<br><em>Gakkou ni ikimasu</em></p>
+    <div class="grid-2 anim-fade delay-2" style="margin-top:24px">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=400&h=200&fit=crop" alt="school">
+        <div class="label">🏫 School</div>
+        <div class="jp-label">がっこう</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=200&fit=crop" alt="classroom">
+        <div class="label">📚 Study</div>
+        <div class="jp-label">べんきょう</div>
+      </div>
+    </div>
+    <div class="text-box highlight anim-fade delay-3" style="margin-top:24px">
+      <p><span class="en">How do you go to school?</span></p>
+      <p class="jp">なんで がっこうに いきますか？</p>
+      <p style="margin-top:8px;font-size:.9rem;color:#86efac">🚶 By walk &nbsp; 🚌 By bus &nbsp; 🚲 By bicycle</p>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 5: SCHOOL SUBJECTS ═══ -->
+  <div class="slide bg-school" data-slide="5">
+    <span class="slide-num">5 / 10</span>
+    <h1 class="title anim-fade">📖 My Favorite Subject</h1>
+    <p class="subtitle anim-fade delay-1">すきな かもく<br><em>Sukina kamoku</em></p>
+    <div class="grid-4 anim-fade delay-2" style="margin-top:24px">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=250&h=150&fit=crop" alt="English">
+        <div class="label">🔤 English</div>
+        <div class="jp-label">えいご</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=250&h=150&fit=crop" alt="Math">
+        <div class="label">🔢 Math</div>
+        <div class="jp-label">すうがく</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?w=250&h=150&fit=crop" alt="Music">
+        <div class="label">🎵 Music</div>
+        <div class="jp-label">おんがく</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=250&h=150&fit=crop" alt="PE">
+        <div class="label">⚽ PE</div>
+        <div class="jp-label">たいいく</div>
+      </div>
+    </div>
+    <div class="speech-bubble anim-fade delay-3" style="margin-top:24px">
+      <p>📚 "What subject do you like best?"</p>
+      <p style="font-size:.8em;color:#86efac;margin-top:4px">「すきなかもくは なんですか？」</p>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 6: LUNCH ═══ -->
+  <div class="slide bg-forest" data-slide="6">
+    <span class="slide-num">6 / 10</span>
+    <h1 class="title anim-fade">🍱 I eat lunch at school</h1>
+    <p class="subtitle anim-fade delay-1">がっこうで ひるごはんを たべます<br><em>Gakkou de hirugohan wo tabemasu</em></p>
+    <div class="grid-3 anim-fade delay-2" style="margin-top:24px">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=300&h=180&fit=crop" alt="bento">
+        <div class="label">🍱 Bento</div>
+        <div class="jp-label">べんとう</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=300&h=180&fit=crop" alt="school lunch">
+        <div class="label">🥘 School Lunch</div>
+        <div class="jp-label">きゅうしょく</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1567337710282-00832b415979?w=300&h=180&fit=crop" alt="fruit">
+        <div class="label">🍎 Fruit</div>
+        <div class="jp-label">くだもの</div>
+      </div>
+    </div>
+    <div class="text-box anim-fade delay-3" style="margin-top:24px">
+      <p><span class="en">"I eat bento with my friends!"</span></p>
+      <p class="jp">「ともだちと べんを たべます！」</p>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 7: AFTER SCHOOL ═══ -->
+  <div class="slide bg-evening" data-slide="7">
+    <span class="slide-num">7 / 10</span>
+    <h1 class="title anim-fade">🎮 After School</h1>
+    <p class="subtitle anim-fade delay-1">がっこうの あと<br><em>Gakkou no ato</em></p>
+    <div class="grid-3 anim-fade delay-2" style="margin-top:24px">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=180&fit=crop" alt="games">
+        <div class="label">🎮 Games</div>
+        <div class="jp-label">ゲーム</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=300&h=180&fit=crop" alt="sports">
+        <div class="label">⚽ Sports</div>
+        <div class="jp-label">スポーツ</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=180&fit=crop" alt="reading">
+        <div class="label">📖 Reading</div>
+        <div class="jp-label">どくしょ</div>
+      </div>
+    </div>
+    <div class="text-box warn anim-fade delay-3" style="margin-top:24px">
+      <p><span class="en">What do you do after school?</span></p>
+      <p class="jp">がっこうの あと なにを しますか？</p>
+    </div>
+    <div class="speech-bubble anim-fade delay-4" style="margin-top:12px">
+      <p>🎮 "I like to play games! What about you?"</p>
+      <p style="font-size:.8em;color:#86efac;margin-top:4px">「ゲームがすき！あなたは？」</p>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 8: EVENING ═══ -->
+  <div class="slide bg-evening" data-slide="8">
+    <span class="slide-num">8 / 10</span>
+    <h1 class="title anim-fade">🍽️ I eat dinner at 6:30</h1>
+    <p class="subtitle anim-fade delay-1">ろくじはんに ばんごはんを たべます<br><em>Rokujihan ni bangohan wo tabemasu</em></p>
+    <div class="grid-2 anim-fade delay-2" style="margin-top:24px">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=200&fit=crop" alt="dinner">
+        <div class="label">🍽️ Dinner</div>
+        <div class="jp-label">ばんごはん</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=200&fit=crop" alt="family">
+        <div class="label">👨‍👩‍👧 Family</div>
+        <div class="jp-label">かぞく</div>
+      </div>
+    </div>
+    <div class="speech-bubble anim-fade delay-3" style="margin-top:24px">
+      <p>🍽️ "I eat dinner with my family at 6:30!"</p>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 9: NIGHT ═══ -->
+  <div class="slide bg-night" data-slide="9">
+    <span class="slide-num">9 / 10</span>
+    <h1 class="title anim-fade">🌙 I go to bed at 10:00</h1>
+    <p class="subtitle anim-fade delay-1">じゅうじに ねます<br><em>Juuji ni nemasu</em></p>
+    <div class="grid-2 anim-fade delay-2" style="margin-top:24px">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1511295742362-92c96b1cf484?w=400&h=200&fit=crop" alt="bath">
+        <div class="label">🛁 Take a bath</div>
+        <div class="jp-label">おふろにはいる</div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=400&h=200&fit=crop" alt="sleep">
+        <div class="label">😴 Go to bed</div>
+        <div class="jp-label">ねます</div>
+      </div>
+    </div>
+    <div class="text-box anim-fade delay-3" style="margin-top:24px">
+      <p><span class="en">"Good night! What time do you go to bed?"</span></p>
+      <p class="jp">「おやすみ！ なんじに ねますか？」</p>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 10: REVIEW ═══ -->
+  <div class="slide bg-forest" data-slide="10">
+    <span class="slide-num">10 / 10</span>
+    <h1 class="title anim-fade">🌟 Let's Review!</h1>
+    <p class="subtitle anim-fade delay-1">おさらい しよう！</p>
+    <div class="text-box anim-fade delay-2" style="margin-top:24px;max-width:700px">
+      <p><span class="en">Can you tell me about YOUR daily routine?</span></p>
+      <p class="jp">あなたの まいにちの しゅうかんを おしえてください！</p>
+    </div>
+    <div class="grid-2 anim-fade delay-3" style="margin-top:24px;max-width:700px">
+      <div class="text-box highlight">
+        <p><span class="en">⏰ I wake up at ___.</span></p>
+        <p class="jp">___じに おきます。</p>
+      </div>
+      <div class="text-box highlight">
+        <p><span class="en">🍳 I eat ___ for breakfast.</span></p>
+        <p class="jp">ちょうしょくは ___ です。</p>
+      </div>
+      <div class="text-box highlight">
+        <p><span class="en">🎒 I go to school by ___.</span></p>
+        <p class="jp">___で がっこうに いきます。</p>
+      </div>
+      <div class="text-box highlight">
+        <p><span class="en">🌙 I go to bed at ___.</span></p>
+        <p class="jp">___じに ねます。</p>
+      </div>
+    </div>
+    <div class="speech-bubble anim-fade delay-4" style="margin-top:24px">
+      <p>🎉 Great job! You can talk about your daily routine in English!</p>
+      <p style="font-size:.8em;color:#86efac;margin-top:4px">「すごい！えいごで まいにちの しゅうかんを はなせるね！」</p>
+    </div>
+  </div>
+
+</div>
+
+<button class="nav-btn nav-prev" id="btnPrev">← Back</button>
+<button class="nav-btn nav-next" id="btnNext">Next →</button>
+
+<script>
+(function(){
+  'use strict';
+  var slides = document.querySelectorAll('.slide');
+  var current = 0;
+  var total = slides.length;
+  var progressFill = document.getElementById('progressFill');
+  var btnPrev = document.getElementById('btnPrev');
+  var btnNext = document.getElementById('btnNext');
+
+  function showSlide(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    progressFill.style.width = ((current + 1) / total * 100) + '%';
+    btnPrev.style.opacity = current === 0 ? '0.3' : '1';
+    btnNext.style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  btnPrev.addEventListener('click', function(){ showSlide(current - 1); });
+  btnNext.addEventListener('click', function(){ showSlide(current + 1); });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); showSlide(current + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); showSlide(current - 1); }
+  });
+
+  // Touch support
+  var touchStartX = 0;
+  document.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', function(e){
+    var diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { showSlide(current + (diff > 0 ? 1 : -1)); }
+  });
+
+  showSlide(0);
+})();
+</script>
+</body>
+</html>
