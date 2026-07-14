@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Past Simple Quiz — Forest Friends</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d2918;
+  --bg-card: #1a3a2a;
+  --bg-card2: #1e4d35;
+  --border: #2d6a4f;
+  --text: #e8f5e9;
+  --text-dim: #88c9a8;
+  --green: #4ade80;
+  --green-dark: #166534;
+  --yellow: #fbbf24;
+  --red: #fb7185;
+  --blue: #60a5fa;
+  --purple: #a78bfa;
+  --orange: #fb923c;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Nunito', 'Comic Sans MS', cursive, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #166534, #15803d, #16a34a);
+  padding: 28px 24px;
+  text-align: center;
+  border-bottom: 4px solid var(--green);
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(74,222,128,0.08) 0%, transparent 60%);
+  animation: pulse 4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.header h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 1;
+}
+.header .subtitle {
+  font-size: 1rem;
+  color: #bbf7d0;
+  margin-top: 4px;
+  position: relative;
+  z-index: 1;
+}
+.header .badge {
+  display: inline-block;
+  background: var(--yellow);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-top: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  background: var(--bg-card);
+  border-bottom: 3px solid var(--border);
+}
+.tab {
+  flex: 1;
+  padding: 16px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: inherit;
+  transition: all 0.2s;
+  border-bottom: 4px solid transparent;
+  position: relative;
+}
+.tab.active {
+  color: var(--green);
+  border-bottom-color: var(--green);
+  background: rgba(74,222,128,0.06);
+}
+.tab:hover:not(.active) {
+  color: var(--text);
+  background: rgba(74,222,128,0.03);
+}
+.tab .tab-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
+
+/* ── CONTAINER ── */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 100px;
+}
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── INFO BOX ── */
+.info-box {
+  background: linear-gradient(135deg, rgba(96,165,250,0.1), rgba(167,139,250,0.1));
+  border: 2px solid rgba(96,165,250,0.3);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.info-box h3 {
+  color: var(--blue);
+  font-weight: 800;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+.info-box p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+.info-box .rule {
+  background: rgba(0,0,0,0.25);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+.info-box .rule strong { color: var(--yellow); }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.q-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+  border-radius: 16px 16px 0 0;
+}
+.q-card.answered { border-color: var(--green); }
+.q-card.answered-wrong { border-color: var(--red); }
+
+.q-number {
+  display: inline-block;
+  background: var(--green-dark);
+  color: var(--green);
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+.q-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.q-text .blank {
+  display: inline-block;
+  min-width: 120px;
+  border-bottom: 3px dashed var(--green);
+  text-align: center;
+  color: var(--yellow);
+  font-weight: 800;
+  margin: 0 4px;
+}
+
+/* ── OPTIONS (MCQ) ── */
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: rgba(0,0,0,0.25);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text);
+  text-align: left;
+  width: 100%;
+}
+.option:hover:not(.disabled) {
+  border-color: var(--blue);
+  background: rgba(96,165,250,0.08);
+}
+.option.selected { border-color: var(--blue); background: rgba(96,165,250,0.15); }
+.option.correct { border-color: var(--green) !important; background: rgba(74,222,128,0.15) !important; }
+.option.wrong { border-color: var(--red) !important; background: rgba(251,113,133,0.15) !important; }
+.option.disabled { cursor: default; opacity: 0.7; }
+.option-letter {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-card2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.option.correct .option-letter { background: var(--green); color: #000; }
+.option.wrong .option-letter { background: var(--red); color: #000; }
+
+/* ── SPELLING INPUT ── */
+.spell-input-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.spell-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px 18px;
+  background: rgba(0,0,0,0.3);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 1.1rem;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 2px;
+  transition: border-color 0.2s;
+}
+.spell-input:focus { outline: none; border-color: var(--green); }
+.spell-input.correct { border-color: var(--green); background: rgba(74,222,128,0.1); }
+.spell-input.wrong { border-color: var(--red); background: rgba(251,113,133,0.1); }
+.spell-input:disabled { opacity: 0.8; }
+
+.hint-btn {
+  padding: 12px 16px;
+  background: rgba(251,191,36,0.15);
+  border: 2px solid rgba(251,191,36,0.4);
+  border-radius: 12px;
+  color: var(--yellow);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.hint-btn:hover { background: rgba(251,191,36,0.25); }
+.hint-btn.used { opacity: 0.4; cursor: default; }
+
+.feedback {
+  margin-top: 10px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: none;
+}
+.feedback.show { display: block; }
+.feedback.correct { background: rgba(74,222,128,0.12); color: var(--green); }
+.feedback.wrong { background: rgba(251,113,133,0.12); color: var(--red); }
+
+/* ── CHECK BUTTON ── */
+.check-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 24px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(22,163,74,0.3);
+}
+.check-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(22,163,74,0.4); }
+.check-btn:active { transform: translateY(0); }
+
+/* ── RESULTS ── */
+.results {
+  display: none;
+  text-align: center;
+  padding: 40px 24px;
+}
+.results.show { display: block; }
+.results .score-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  position: relative;
+}
+.results .score-circle .big { font-size: 2.5rem; line-height: 1; }
+.results .score-circle .small { font-size: 0.85rem; opacity: 0.8; }
+.results h2 { font-size: 1.6rem; margin-bottom: 8px; }
+.results .msg { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 24px; }
+.results .emoji-big { font-size: 4rem; margin-bottom: 12px; }
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  height: 8px;
+  background: var(--bg-card2);
+  border-radius: 4px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--blue));
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ── CHARACTER MASCOT ── */
+.mascot {
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 16px;
+  animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ── QUESTION STATUS ICON ── */
+.q-status-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 1.4rem;
+  font-weight: 900;
+  z-index: 2;
+}
+
+/* ── MISTAKES REVIEW ── */
+.mistakes-review {
+  display: none;
+  margin-top: 28px;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.mistakes-review.show { display: block; }
+.mistakes-review .mr-header {
+  padding: 16px 24px;
+  font-weight: 800;
+  font-size: 1.15rem;
+  border-bottom: 2px solid var(--border);
+}
+.mistakes-review .mr-header.red { background: rgba(251,113,133,0.12); color: var(--red); }
+.mistakes-review .mr-header.green { background: rgba(74,222,128,0.12); color: var(--green); }
+.mistakes-list { padding: 16px 24px; }
+.mistake-item {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.mistake-item:last-child { border-bottom: none; }
+.mistake-num {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(251,113,133,0.15);
+  color: var(--red);
+  font-weight: 800;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.mistake-detail { flex: 1; }
+.mistake-q { font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
+.mistake-your { color: var(--red); font-size: 0.92rem; margin-bottom: 3px; }
+.mistake-correct { color: var(--green); font-size: 0.92rem; margin-bottom: 6px; }
+.mistake-explain { color: var(--text-dim); font-size: 0.88rem; font-style: italic; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 500px) {
+  .header h1 { font-size: 1.5rem; }
+  .q-text { font-size: 1rem; }
+  .container { padding: 16px 12px 100px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🦊 Past Simple Quiz</h1>
+  <div class="subtitle">Forest Friends — A2 Level</div>
+  <div class="badge">⭐ Ages 10-12</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('mcq')">
+    <span class="tab-icon">🎯</span>
+    Multiple Choice
+  </button>
+  <button class="tab" onclick="switchTab('spelling')">
+    <span class="tab-icon">✏️</span>
+    Spelling Test
+  </button>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════ MCQ SECTION ═══════════ -->
+  <div class="section active" id="tab-mcq">
+
+    <div class="info-box">
+      <h3>📖 Past Simple — Quick Reminder</h3>
+      <p>We use the <strong>Past Simple</strong> for actions that started and finished in the past.</p>
+      <div class="rule">
+        ✅ <strong>Regular verbs:</strong> add <strong>-ed</strong> (played, walked, cooked)<br>
+        ✅ <strong>Irregular verbs:</strong> special forms (went, ate, saw, did)<br>
+        ✅ <strong>Negative:</strong> didn't + base verb (didn't go, didn't eat)
+      </div>
+    </div>
+
+    <div class="mascot">🦉</div>
+    <div class="progress-bar"><div class="progress-fill" id="mcq-progress" style="width:0%"></div></div>
+
+    <div id="mcq-questions"></div>
+
+    <button class="check-btn" onclick="checkMCQ()">✅ Check My Answers</button>
+
+    <div class="results" id="mcq-results">
+      <div class="emoji-big" id="mcq-emoji"></div>
+      <div class="score-circle" id="mcq-score-circle">
+        <div class="big" id="mcq-score"></div>
+        <div class="small">out of 10</div>
+      </div>
+      <h2 id="mcq-result-title"></h2>
+      <p class="msg" id="mcq-result-msg"></p>
+      <button class="check-btn" onclick="resetMCQ()">🔄 Try Again</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ SPELLING SECTION ═══════════ -->
+  <div class="section" id="tab-spelling">
+
+    <div class="info-box">
+      <h3>✏️ Spelling Test — Past Simple Verbs</h3>
+      <p>Type the <strong>past simple</strong> form of each verb. Listen to the hint if you need help!</p>
+      <div class="rule">
+        💡 <strong>Hint:</strong> Is it regular (-ed) or irregular (special form)?<br>
+        💡 <strong>Double letter?</strong> stopped, planned, dropped
+      </div>
+    </div>
+
+    <div class="mascot">🐸</div>
+    <div class="progress-bar"><div class="progress-fill" id="spell-progress" style="width:0%"></div></div>
+
+    <div id="spell-questions"></div>
+
+    <button class="check-btn" onclick="checkSpelling()">✅ Check My Spelling</button>
+
+    <div class="results" id="spell-results">
+      <div class="emoji-big" id="spell-emoji"></div>
+      <div class="score-circle" id="spell-score-circle">
+        <div class="big" id="spell-score"></div>
+        <div class="small">out of 10</div>
+      </div>
+      <h2 id="spell-result-title"></h2>
+      <p class="msg" id="spell-result-msg"></p>
+      <button class="check-btn" onclick="resetSpelling()">🔄 Try Again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════ TAB SWITCHING ═══════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+// ═══════════ MCQ DATA ═══════════
+var mcqData = [
+  {
+    q: "Yesterday, I ___ to the park with my friends.",
+    options: ["go", "goed", "went", "going"],
+    answer: 2,
+    explanation: "'Go' is irregular — the past simple is 'went'."
+  },
+  {
+    q: "She ___ a delicious cake for her mum's birthday.",
+    options: ["bake", "baked", "baking", "bakes"],
+    answer: 1,
+    explanation: "'Bake' is regular — just add -ed: baked."
+  },
+  {
+    q: "We ___ TV after dinner last night.",
+    options: ["watched", "watch", "watching", "watchd"],
+    answer: 0,
+    explanation: "'Watch' is regular — add -ed: watched."
+  },
+  {
+    q: "He ___ his homework before lunch.",
+    options: ["do", "did", "does", "doing"],
+    answer: 1,
+    explanation: "'Do' is irregular — the past simple is 'did'."
+  },
+  {
+    q: "The children ___ in the garden all afternoon.",
+    options: ["play", "plaied", "played", "playing"],
+    answer: 2,
+    explanation: "'Play' ends in vowel + y, so just add -ed: played."
+  },
+  {
+    q: "I ___ a big elephant at the zoo!",
+    options: ["see", "seed", "saw", "seeing"],
+    answer: 2,
+    explanation: "'See' is irregular — the past simple is 'saw'."
+  },
+  {
+    q: "They ___ to school because it was Sunday.",
+    options: ["didn't went", "didn't go", "don't go", "not go"],
+    answer: 1,
+    explanation: "Negative past: didn't + base verb (didn't go)."
+  },
+  {
+    q: "My dad ___ me a new bike for my birthday.",
+    options: ["buy", "buyed", "bought", "buying"],
+    answer: 2,
+    explanation: "'Buy' is irregular — the past simple is 'bought'."
+  },
+  {
+    q: "We ___ very happy when we won the game.",
+    options: ["are", "were", "was", "be"],
+    answer: 1,
+    explanation: "'We' takes 'were' in the past simple of 'be'."
+  },
+  {
+    q: "The cat ___ the mouse and ___ away!",
+    options: ["catch / run", "catched / runned", "caught / ran", "catches / runs"],
+    answer: 2,
+    explanation: "Both are irregular: catch → caught, run → ran."
+  }
+];
+
+// ═══════════ SPELLING DATA ═══════════
+var spellData = [
+  { base: "walk", past: "walked", hint: "Regular verb — just add -ed" },
+  { base: "stop", past: "stopped", hint: "Short verb ending in consonant-vowel-consonant — double the last letter + ed" },
+  { base: "eat", past: "ate", hint: "Irregular — think: I eat today, I ___ yesterday" },
+  { base: "study", past: "studied", hint: "Ends in consonant + y → change y to i + ed" },
+  { base: "go", past: "went", hint: "Very common irregular verb" },
+  { base: "plan", past: "planned", hint: "Short verb — double the n + ed" },
+  { base: "see", past: "saw", hint: "Irregular — you use your eyes to ___" },
+  { base: "carry", past: "carried", hint: "Ends in consonant + y → change y to i + ed" },
+  { base: "have", past: "had", hint: "Irregular — I ___ a dog. Yesterday I ___ a test." },
+  { base: "drop", past: "dropped", hint: "Short verb ending in c-v-c — double the p + ed" }
+];
+
+// ═══════════ RENDER MCQ ═══════════
+function renderMCQ() {
+  var container = document.getElementById('mcq-questions');
+  container.innerHTML = '';
+  mcqData.forEach(function(item, i) {
+    var letters = ['A', 'B', 'C', 'D'];
+    var html = '<div class="q-card" id="mcq-card-' + i + '">';
+    html += '<div class="q-status-icon" id="mcq-status-' + i + '"></div>';
+    html += '<div class="q-number">Question ' + (i + 1) + ' of 10</div>';
+    html += '<div class="q-text">' + item.q.replace('___', '<span class="blank" id="mcq-blank-' + i + '">___</span>') + '</div>';
+    html += '<div class="options">';
+    item.options.forEach(function(opt, j) {
+      html += '<button class="option" onclick="selectMCQ(' + i + ',' + j + ')" id="mcq-' + i + '-' + j + '">';
+      html += '<span class="option-letter">' + letters[j] + '</span>';
+      html += '<span>' + opt + '</span>';
+      html += '</button>';
+    });
+    html += '</div>';
+    html += '<div class="feedback" id="mcq-fb-' + i + '"></div>';
+    html += '</div>';
+    container.innerHTML += html;
+  });
+}
+
+function selectMCQ(qIdx, optIdx) {
+  var card = document.getElementById('mcq-card-' + qIdx);
+  if (card.classList.contains('answered')) return;
+
+  // Deselect all
+  for (var j = 0; j < 4; j++) {
+    document.getElementById('mcq-' + qIdx + '-' + j).classList.remove('selected');
+  }
+  // Select this one
+  document.getElementById('mcq-' + qIdx + '-' + optIdx).classList.add('selected');
+  // Update blank
+  document.getElementById('mcq-blank-' + qIdx).textContent = mcqData[qIdx].options[optIdx];
+
+  updateMCQProgress();
+}
+
+function updateMCQProgress() {
+  var answered = 0;
+  mcqData.forEach(function(item, i) {
+    if (document.getElementById('mcq-card-' + i).classList.contains('answered') ||
+        document.querySelector('#mcq-card-' + i + ' .option.selected')) {
+      answered++;
+    }
+  });
+  document.getElementById('mcq-progress').style.width = (answered / mcqData.length * 100) + '%';
+}
+
+function checkMCQ() {
+  var score = 0;
+  mcqData.forEach(function(item, i) {
+    var card = document.getElementById('mcq-card-' + i);
+    var selected = document.querySelector('#mcq-card-' + i + ' .option.selected');
+    var fb = document.getElementById('mcq-fb-' + i);
+
+    if (!selected) {
+      fb.textContent = '⚠️ Please choose an answer!';
+      fb.className = 'feedback show wrong';
+      return;
+    }
+
+    var selectedIdx = parseInt(selected.id.split('-')[2]);
+    card.classList.add('answered');
+
+    // Disable all options
+    for (var j = 0; j < 4; j++) {
+      document.getElementById('mcq-' + i + '-' + j).classList.add('disabled');
+    }
+
+    if (selectedIdx === item.answer) {
+      selected.classList.add('correct');
+      fb.textContent = '✅ Correct! ' + item.explanation;
+      fb.className = 'feedback show correct';
+      score++;
+    } else {
+      selected.classList.add('wrong');
+      document.getElementById('mcq-' + i + '-' + item.answer).classList.add('correct');
+      fb.textContent = '❌ Not quite. ' + item.explanation;
+      fb.className = 'feedback show wrong';
+    }
+  });
+
+  showMCQResults(score);
+}
+
+function showMCQResults(score) {
+  document.getElementById('mcq-questions').style.display = 'none';
+  document.querySelector('#tab-mcq .check-btn').style.display = 'none';
+  var results = document.getElementById('mcq-results');
+  results.classList.add('show');
+
+  document.getElementById('mcq-score').textContent = score;
+
+  var pct = score / mcqData.length;
+  var circle = document.getElementById('mcq-score-circle');
+  var emoji, title, msg;
+
+  if (pct >= 0.9) {
+    emoji = '🏆'; title = 'Amazing! You\'re a star!'; msg = 'You really know your past simple!';
+    circle.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+    circle.style.color = '#000';
+  } else if (pct >= 0.7) {
+    emoji = '🌟'; title = 'Great job!'; msg = 'You understand past simple well. Keep practicing!';
+    circle.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
+    circle.style.color = '#000';
+  } else if (pct >= 0.5) {
+    emoji = '💪'; title = 'Good try!'; msg = 'You\'re getting there. Let\'s practice a bit more!';
+    circle.style.background = 'linear-gradient(135deg, #60a5fa, #3b82f6)';
+    circle.style.color = '#000';
+  } else {
+    emoji = '📚'; title = 'Keep learning!'; msg = 'Past simple is tricky. Try again and use the hints!';
+    circle.style.background = 'linear-gradient(135deg, #fb7185, #e11d48)';
+    circle.style.color = '#000';
+  }
+
+  document.getElementById('mcq-emoji').textContent = emoji;
+  document.getElementById('mcq-result-title').textContent = title;
+  document.getElementById('mcq-result-msg').textContent = msg;
+}
+
+function resetMCQ() {
+  document.getElementById('mcq-results').classList.remove('show');
+  document.getElementById('mcq-questions').style.display = 'block';
+  document.querySelector('#tab-mcq .check-btn').style.display = 'block';
+  document.getElementById('mcq-progress').style.width = '0%';
+  renderMCQ();
+}
+
+// ═══════════ RENDER SPELLING ═══════════
+function renderSpelling() {
+  var container = document.getElementById('spell-questions');
+  container.innerHTML = '';
+  spellData.forEach(function(item, i) {
+    var html = '<div class="q-card" id="spell-card-' + i + '">';
+    html += '<div class="q-number">Word ' + (i + 1) + ' of 10</div>';
+    html += '<div class="q-text">Write the past simple of: <strong style="color:var(--yellow)">' + item.base + '</strong></div>';
+    html += '<div class="spell-input-wrap">';
+    html += '<input type="text" class="spell-input" id="spell-input-' + i + '" placeholder="Type here..." autocomplete="off" oninput="updateSpellProgress()">';
+    html += '<button class="hint-btn" id="spell-hint-btn-' + i + '" onclick="showSpellHint(' + i + ')">💡 Hint</button>';
+    html += '</div>';
+    html += '<div class="feedback" id="spell-fb-' + i + '"></div>';
+    html += '</div>';
+    container.innerHTML += html;
+  });
+}
+
+function showSpellHint(i) {
+  var btn = document.getElementById('spell-hint-btn-' + i);
+  if (btn.classList.contains('used')) return;
+  btn.classList.add('used');
+  var fb = document.getElementById('spell-fb-' + i);
+  fb.textContent = '💡 ' + spellData[i].hint;
+  fb.className = 'feedback show correct';
+}
+
+function updateSpellProgress() {
+  var filled = 0;
+  spellData.forEach(function(item, i) {
+    if (document.getElementById('spell-input-' + i).value.trim()) filled++;
+  });
+  document.getElementById('spell-progress').style.width = (filled / spellData.length * 100) + '%';
+}
+
+function checkSpelling() {
+  var score = 0;
+  spellData.forEach(function(item, i) {
+    var input = document.getElementById('spell-input-' + i);
+    var card = document.getElementById('spell-card-' + i);
+    var fb = document.getElementById('spell-fb-' + i);
+    var userAnswer = input.value.trim().toLowerCase();
+    var correct = item.past.toLowerCase();
+
+    input.disabled = true;
+    card.classList.add('answered');
+
+    if (!userAnswer) {
+      fb.textContent = '⚠️ You didn\'t write anything! The answer is: ' + item.past;
+      fb.className = 'feedback show wrong';
+      input.classList.add('wrong');
+      return;
+    }
+
+    if (userAnswer === correct) {
+      input.classList.add('correct');
+      fb.textContent = '✅ Perfect!';
+      fb.className = 'feedback show correct';
+      score++;
+    } else {
+      input.classList.add('wrong');
+      fb.textContent = '❌ Not quite. You wrote "' + input.value.trim() + '" — the correct spelling is: <strong>' + item.past + '</strong>';
+      fb.className = 'feedback show wrong';
+    }
+  });
+
+  showSpellingResults(score);
+}
+
+function showSpellingResults(score) {
+  document.getElementById('spell-questions').style.display = 'none';
+  document.querySelector('#tab-spelling .check-btn').style.display = 'none';
+  var results = document.getElementById('spell-results');
+  results.classList.add('show');
+
+  document.getElementById('spell-score').textContent = score;
+
+  var pct = score / spellData.length;
+  var circle = document.getElementById('spell-score-circle');
+  var emoji, title, msg;
+
+  if (pct >= 0.9) {
+    emoji = '🏆'; title = 'Spelling Champion!'; msg = 'Your spelling is excellent!';
+    circle.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+    circle.style.color = '#000';
+  } else if (pct >= 0.7) {
+    emoji = '🌟'; title = 'Well done!'; msg = 'Great spelling! A few to practice.';
+    circle.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
+    circle.style.color = '#000';
+  } else if (pct >= 0.5) {
+    emoji = '💪'; title = 'Good effort!'; msg = 'Keep practicing those spellings!';
+    circle.style.background = 'linear-gradient(135deg, #60a5fa, #3b82f6)';
+    circle.style.color = '#000';
+  } else {
+    emoji = '📚'; title = 'Keep trying!'; msg = 'Spelling takes practice. You\'ll get better!';
+    circle.style.background = 'linear-gradient(135deg, #fb7185, #e11d48)';
+    circle.style.color = '#000';
+  }
+
+  document.getElementById('spell-emoji').textContent = emoji;
+  document.getElementById('spell-result-title').textContent = title;
+  document.getElementById('spell-result-msg').textContent = msg;
+}
+
+function resetSpelling() {
+  document.getElementById('spell-results').classList.remove('show');
+  document.getElementById('spell-questions').style.display = 'block';
+  document.querySelector('#tab-spelling .check-btn').style.display = 'block';
+  document.getElementById('spell-progress').style.width = '0%';
+  renderSpelling();
+}
+
+// ═══════════ INIT ═══════════
+renderMCQ();
+renderSpelling();
+</script>
+<!-- Donate Section — inconspicuous, bottom of page -->
+<div id="donate-bar" style="text-align:center;padding:12px 0 8px;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.5px;border-top:1px solid rgba(255,255,255,0.06);margin-top:auto">
+  <span style="margin-right:10px">Support this project</span>
+  <a href="https://paypal.me/williamgraythomason" target="_blank" rel="noopener" style="display:inline-block;background:#0070ba;color:#fff;padding:4px 12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:11px;margin:0 4px">PayPal</a>
+  <a href="https://wise.com/payme/williamgraythomason" target="_blank" rel="noopener" style="display:inline-block;background:#9fe870;color:#163300;padding:4px 12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:11px;margin:0 4px">Wise</a>
+</div>
+</body>
+</html>
